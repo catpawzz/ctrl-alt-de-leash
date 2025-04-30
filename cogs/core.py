@@ -16,42 +16,48 @@ class GenericCog(commands.Cog):
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
     async def ping(self, ctx):
-        """
-        Command to check if the bot is online and display latency metrics.
-        """
-        # Log the command usage
         self.logger.info(f"{ctx.author} used /ping command in {ctx.channel} on {ctx.guild}.")
-
-        # Discord WebSocket latency
-        discord_latency = self.bot.latency * 1000  # Convert latency to ms
-
-        # Record the time before sending the response to measure REST API latency
+        
+        discord_latency = self.bot.latency * 1000
+        
         start_time = time.perf_counter()
-        initial_response = await ctx.respond("Talking to Discord :typing:", ephemeral=True)  # Initial response
-        rest_latency = (time.perf_counter() - start_time) * 1000  # Convert to ms
-
-        # Measure message edit latency
+        initial_response = await ctx.respond("Measuring latency...", ephemeral=True)
+        rest_latency = (time.perf_counter() - start_time) * 1000
+        
         edit_start_time = time.perf_counter()
-        response_message = await initial_response.original_response()  # Retrieve the original response message
+        response_message = await initial_response.original_response()
         await response_message.edit(content="Updating ping details...")
-        edit_latency = (time.perf_counter() - edit_start_time) * 1000  # Convert to ms
-
-        # Update the message with the final metrics
-        await response_message.edit(content=(
-            f":pencil: Edit message: `{edit_latency:.0f}ms`\n"
-            f":discord: Discord: `{discord_latency:.0f}ms`\n"
-            f":download: RestAction: `{rest_latency:.0f}ms`"
-        ))
+        edit_latency = (time.perf_counter() - edit_start_time) * 1000
+        
+        embed = discord.Embed(
+            title="Bot Latency",
+            description=(
+                f":pencil: Edit message: `{edit_latency:.0f}ms`\n"
+                f":discord: Discord: `{discord_latency:.0f}ms`\n"
+                f":download: RestAction: `{rest_latency:.0f}ms`"
+            ),
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.timestamp = datetime.datetime.now()
+        
+        await response_message.edit(content=None, embed=embed)
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}, name="uptime", description="Returns the bot's uptime")
     async def uptime(self, ctx: discord.ApplicationContext):
-        """
-        A slash command to return the bot's uptime.
-        """
         current_time = time.time()
         uptime_seconds = int(current_time - self.bot.start_time)
         uptime_string = str(datetime.timedelta(seconds=uptime_seconds))
-        await ctx.respond(f"Uptime: {uptime_string}", ephemeral=True)
+        
+        embed = discord.Embed(
+            title="Bot Uptime",
+            description=f"I've been online for: `{uptime_string}`",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.timestamp = datetime.datetime.now()
+        
+        await ctx.respond(embed=embed, ephemeral=True)
         
 def setup(bot):
     bot.add_cog(GenericCog(bot))

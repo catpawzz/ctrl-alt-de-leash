@@ -2,6 +2,7 @@
 import logging
 import discord
 from discord.ext import commands, tasks
+# Remove the app_commands import that's causing errors
 from dotenv import load_dotenv
 import os
 import datetime
@@ -19,12 +20,35 @@ class Bot(commands.AutoShardedBot):
         intents.message_content = True
         intents.voice_states = True
         
-        super().__init__(intents=intents, sync_commands=True)
+        # Initialize with sync_commands=True for older discord.py versions
+        super().__init__(
+            command_prefix=commands.when_mentioned_or('!'),
+            intents=intents,
+            application_id=os.getenv('APPLICATION_ID'),
+            sync_commands=True  # This will handle command syncing automatically
+        )
+        
+        # Remove explicit tree initialization
+        
         self.start_time = time.time()
         self.logger = setup_logger()
         
         # Load all cogs
         self.load_extensions()
+        
+        # Add event listeners
+        @self.event
+        async def on_ready():
+            self.logger.info(f"Bot is ready! Logged in as {self.user} (ID: {self.user.id})")
+            self.logger.info(f"Bot is in {len(self.guilds)} guilds")
+            
+            # Log that commands should sync automatically
+            self.logger.info("Commands set to sync automatically with sync_commands=True")
+            self.logger.info("Note: Global commands may take up to an hour to update")
+            
+            # For development, you might want to consider upgrading discord.py
+            # to version 2.0+ for better slash command support
+            self.logger.info("TIP: Consider upgrading to discord.py v2.0+ for improved slash command support")
         
     def load_extensions(self) -> None:
         """Load all cogs from the cogs directory"""
@@ -78,10 +102,12 @@ def run_bot():
     load_dotenv()
     bot = Bot()
     
+    # Log startup information before running the bot
+    bot.logger.info("Starting bot...")
+    
     try:
+        # bot.run() is a blocking call
         bot.run(os.getenv('BOT_TOKEN'))
-        bot.logger.info("Bot started")
-        bot.logger.info(f"Bot is running as {bot.user.name} in {len(bot.guilds)} guilds")
     except Exception as e:
         bot.logger.error(f"Error running bot: {e}")
         sys.exit(1)
