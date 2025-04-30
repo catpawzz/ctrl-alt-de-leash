@@ -1,0 +1,92 @@
+import logging
+import discord
+from discord.ext import commands
+import random
+from datetime import datetime
+
+class AffectionCog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.logger = logging.getLogger('bot.py')
+        
+        self.hug_gifs = [
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbThhNWR4cTVrZGpuZnFobmNibmVyYXJxdmRnY3hhbzNjampqcDhxYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/GMFUrC8E8aWoo/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbThhNWR4cTVrZGpuZnFobmNibmVyYXJxdmRnY3hhbzNjampqcDhxYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/qscdhWs5o3yb6/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbThhNWR4cTVrZGpuZnFobmNibmVyYXJxdmRnY3hhbzNjampqcDhxYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PHZ7v9tfQu0o0/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbThhNWR4cTVrZGpuZnFobmNibmVyYXJxdmRnY3hhbzNjampqcDhxYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/od5H3PmEG5EVq/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbThhNWR4cTVrZGpuZnFobmNibmVyYXJxdmRnY3hhbzNjampqcDhxYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ZQN9jsRWp1M76/giphy.gif",
+            "https://media.giphy.com/media/5eyhBKLvYhafu/giphy.gif?cid=ecf05e47hh0mm7nk95qv953z9vg6sfvp4tp7mojrfjqetump&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+            "https://media.giphy.com/media/VXP04aclCaUfe/giphy.gif?cid=ecf05e47cy36uwf4c3gyaascvtsvk8jrqw96pwnb29daqfnq&ep=v1_gifs_search&rid=giphy.gif&ct=g"
+        ]
+        
+        self.pat_gifs = [
+            "https://media.giphy.com/media/109ltuoSQT212w/giphy.gif",
+            "https://media.giphy.com/media/ARSp9T7wwxNcs/giphy.gif",
+            "https://media.giphy.com/media/ye7OTQgwmVuVy/giphy.gif",
+            "https://media.giphy.com/media/Z7x24IHBcmV7W/giphy.gif",
+            "https://media.giphy.com/media/L2z7dnOduqEow/giphy.gif",
+            "https://media.giphy.com/media/5tmRHwTlHAA9WkVxTU/giphy.gif",
+            "https://media.giphy.com/media/osYdfUptPqV0s/giphy.gif"
+        ]
+        
+        self.cuddle_gifs = [
+            "https://media.giphy.com/media/l2QDM9Jnim1YVILXa/giphy.gif",
+            "https://media.giphy.com/media/ZQN9jsRWp1M76/giphy.gif",
+            "https://media.giphy.com/media/143v0Z4767T15e/giphy.gif",
+            "https://media.giphy.com/media/du8yT5dStTeMg/giphy.gif",
+            "https://media.giphy.com/media/IRUb7GTCaPU8E/giphy.gif"
+        ]
+
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    async def hug(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} hugged {user} using /hug command in {ctx.channel} on {ctx.guild}.")
+        
+        random_hug = random.choice(self.hug_gifs)
+        
+        embed = discord.Embed(
+            title="Virtual Hug!",
+            description=f"{ctx.author.mention} sent a hug to {user.mention}",
+            color=discord.Color(0xe898ff) 
+        )
+        embed.set_image(url=random_hug)
+        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.timestamp = datetime.now()
+        
+        await ctx.respond(embed=embed)
+    
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    async def pat(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} patted {user} using /pat command in {ctx.channel} on {ctx.guild}.")
+        
+        random_pat = random.choice(self.pat_gifs)
+        
+        embed = discord.Embed(
+            title="Head Pat!",
+            description=f"{ctx.author.mention} patted {user.mention}",
+            color=discord.Color(0xe898ff) 
+        )
+        embed.set_image(url=random_pat)
+        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.timestamp = datetime.now()
+        
+        await ctx.respond(embed=embed)
+    
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    async def cuddle(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} cuddled {user} using /cuddle command in {ctx.channel} on {ctx.guild}.")
+        
+        random_cuddle = random.choice(self.cuddle_gifs)
+        
+        embed = discord.Embed(
+            title="Cuddle Time!",
+            description=f"{ctx.author.mention} cuddled with {user.mention}",
+            color=discord.Color(0xe898ff) 
+        )
+        embed.set_image(url=random_cuddle)
+        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.timestamp = datetime.now()
+        
+        await ctx.respond(embed=embed)
+
+def setup(bot):
+    bot.add_cog(AffectionCog(bot))
