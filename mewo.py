@@ -42,13 +42,18 @@ class Bot(commands.AutoShardedBot):
             self.logger.info(f"Bot is ready! Logged in as {self.user} (ID: {self.user.id})")
             self.logger.info(f"Bot is in {len(self.guilds)} guilds")
             
+            # Set bot's display name if provided in environment variables
+            display_name = "Ctrl + Alt + De-Leash"
+            if display_name and self.user.display_name != display_name:
+                try:
+                    await self.user.edit(username=display_name)
+                    self.logger.info(f"Changed bot display name to: {display_name}")
+                except discord.HTTPException as e:
+                    self.logger.error(f"Failed to change display name: {e}")
+            
             # Log that commands should sync automatically
             self.logger.info("Commands set to sync automatically with sync_commands=True")
             self.logger.info("Note: Global commands may take up to an hour to update")
-            
-            # For development, you might want to consider upgrading discord.py
-            # to version 2.0+ for better slash command support
-            self.logger.info("TIP: Consider upgrading to discord.py v2.0+ for improved slash command support")
         
     def load_extensions(self) -> None:
         """Load all cogs from the cogs directory"""
