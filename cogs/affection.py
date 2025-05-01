@@ -36,6 +36,13 @@ class AffectionCog(commands.Cog):
             "https://media.giphy.com/media/du8yT5dStTeMg/giphy.gif",
             "https://media.giphy.com/media/IRUb7GTCaPU8E/giphy.gif"
         ]
+        
+        self.tackle_gifs = [
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGRyaG9mbjZkYnBwOWI5eXNqd2dsemMxZWNnN3kzN3d5am4xODRjMCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/uXXPhr8D6HSXS/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGRyaG9mbjZkYnBwOWI5eXNqd2dsemMxZWNnN3kzN3d5am4xODRjMCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kz0qWS2lAqtdAnEmEM/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGRyaG9mbjZkYnBwOWI5eXNqd2dsemMxZWNnN3kzN3d5am4xODRjMCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/G6fmc0H5xpZDO/giphy.gif",
+            "https://media.giphy.com/media/us8FXd0EtOXXa/giphy.gif?cid=ecf05e472huzjeuacr80dbh862i4chzosp6y07kjqas8rvhd&ep=v1_gifs_search&rid=giphy.gif&ct=g"
+        ]
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
     async def hug(self, ctx, user: discord.Member):
@@ -49,7 +56,7 @@ class AffectionCog(commands.Cog):
             color=discord.Color(0xe898ff) 
         )
         embed.set_image(url=random_hug)
-        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.now()
         
         await ctx.respond(embed=embed)
@@ -66,7 +73,7 @@ class AffectionCog(commands.Cog):
             color=discord.Color(0xe898ff) 
         )
         embed.set_image(url=random_pat)
-        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.now()
         
         await ctx.respond(embed=embed)
@@ -83,7 +90,24 @@ class AffectionCog(commands.Cog):
             color=discord.Color(0xe898ff) 
         )
         embed.set_image(url=random_cuddle)
-        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        
+        await ctx.respond(embed=embed)
+    
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    async def tackle(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} tackled {user} using /tackle command in {ctx.channel} on {ctx.guild}.")
+        
+        random_tackle = random.choice(self.tackle_gifs)
+        
+        embed = discord.Embed(
+            title="Tackle!",
+            description=f"{ctx.author.mention} tackled {user.mention}",
+            color=discord.Color(0xe898ff) 
+        )
+        embed.set_image(url=random_tackle)
+        embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.now()
         
         await ctx.respond(embed=embed)

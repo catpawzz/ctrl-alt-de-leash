@@ -33,12 +33,12 @@ class GenericCog(commands.Cog):
             title="Bot Latency",
             description=(
                 f":pencil: Edit message: `{edit_latency:.0f}ms`\n"
-                f":discord: Discord: `{discord_latency:.0f}ms`\n"
-                f":download: RestAction: `{rest_latency:.0f}ms`"
+                f":eyes: Discord: `{discord_latency:.0f}ms`\n"
+                f":inbox_tray: RestAction: `{rest_latency:.0f}ms`"
             ),
             color=discord.Color(0xe898ff)
         )
-        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
         await response_message.edit(content=None, embed=embed)
@@ -54,7 +54,7 @@ class GenericCog(commands.Cog):
             description=f"I've been online for: `{uptime_string}`",
             color=discord.Color(0xe898ff)
         )
-        embed.set_footer(text="Ctrl + Alt + De-Leash")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed, ephemeral=True)

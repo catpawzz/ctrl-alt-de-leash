@@ -43,7 +43,7 @@ class Bot(commands.AutoShardedBot):
             self.logger.info(f"Bot is in {len(self.guilds)} guilds")
             
             # Set bot's display name if provided in environment variables
-            display_name = "Ctrl + Alt + De-Leash"
+            display_name = os.getenv('BOT_NAME')
             if display_name and self.user.display_name != display_name:
                 try:
                     await self.user.edit(username=display_name)
