@@ -350,3 +350,6 @@ class AffectionCog(commands.Cog):
         
         await ctx.respond(embed=embed)
 
+async def setup(bot):
+    await bot.add_cog(AffectionCog(bot))
+
