@@ -14,9 +14,19 @@ class GenericCog(commands.Cog):
         self.bot = bot
         self.logger = logging.getLogger('bot.py')
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    # Create a utility command group
+    utility = discord.commands.SlashCommandGroup(
+        "utility", 
+        "General utility commands",
+        integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}
+    )
+    
+    @utility.command(
+        name="ping",
+        description="Check the bot's response time and latency"
+    )
     async def ping(self, ctx):
-        self.logger.info(f"{ctx.author} used /ping command in {ctx.channel} on {ctx.guild}.")
+        self.logger.info(f"{ctx.author} used /utility ping command in {ctx.channel} on {ctx.guild}.")
         
         discord_latency = self.bot.latency * 1000
         
@@ -43,7 +53,10 @@ class GenericCog(commands.Cog):
         
         await response_message.edit(content=None, embed=embed)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}, name="uptime", description="Returns the bot's uptime")
+    @utility.command(
+        name="uptime",
+        description="Returns the bot's uptime"
+    )
     async def uptime(self, ctx: discord.ApplicationContext):
         current_time = time.time()
         uptime_seconds = int(current_time - self.bot.start_time)

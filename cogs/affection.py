@@ -44,9 +44,19 @@ class AffectionCog(commands.Cog):
             "https://media.giphy.com/media/us8FXd0EtOXXa/giphy.gif?cid=ecf05e472huzjeuacr80dbh862i4chzosp6y07kjqas8rvhd&ep=v1_gifs_search&rid=giphy.gif&ct=g"
         ]
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    # Create an affection command group
+    affection = discord.commands.SlashCommandGroup(
+        "affection", 
+        "Commands for expressing affection",
+        integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}
+    )
+    
+    @affection.command(
+        name="hug",
+        description="Send a virtual hug to someone special"
+    )
     async def hug(self, ctx, user: discord.Member):
-        self.logger.info(f"{ctx.author} hugged {user} using /hug command in {ctx.channel} on {ctx.guild}.")
+        self.logger.info(f"{ctx.author} hugged {user} using /affection hug command in {ctx.channel} on {ctx.guild}.")
         
         random_hug = random.choice(self.hug_gifs)
         
@@ -61,9 +71,12 @@ class AffectionCog(commands.Cog):
         
         await ctx.respond(embed=embed)
     
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    @affection.command(
+        name="pat",
+        description="Give someone a gentle head pat"
+    )
     async def pat(self, ctx, user: discord.Member):
-        self.logger.info(f"{ctx.author} patted {user} using /pat command in {ctx.channel} on {ctx.guild}.")
+        self.logger.info(f"{ctx.author} patted {user} using /affection pat command in {ctx.channel} on {ctx.guild}.")
         
         random_pat = random.choice(self.pat_gifs)
         
@@ -78,9 +91,12 @@ class AffectionCog(commands.Cog):
         
         await ctx.respond(embed=embed)
     
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    @affection.command(
+        name="cuddle",
+        description="Cuddle with someone for warmth and comfort"
+    )
     async def cuddle(self, ctx, user: discord.Member):
-        self.logger.info(f"{ctx.author} cuddled {user} using /cuddle command in {ctx.channel} on {ctx.guild}.")
+        self.logger.info(f"{ctx.author} cuddled {user} using /affection cuddle command in {ctx.channel} on {ctx.guild}.")
         
         random_cuddle = random.choice(self.cuddle_gifs)
         
@@ -95,9 +111,12 @@ class AffectionCog(commands.Cog):
         
         await ctx.respond(embed=embed)
     
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    @affection.command(
+        name="tackle",
+        description="Playfully tackle someone to the ground"
+    )
     async def tackle(self, ctx, user: discord.Member):
-        self.logger.info(f"{ctx.author} tackled {user} using /tackle command in {ctx.channel} on {ctx.guild}.")
+        self.logger.info(f"{ctx.author} tackled {user} using /affection tackle command in {ctx.channel} on {ctx.guild}.")
         
         random_tackle = random.choice(self.tackle_gifs)
         
