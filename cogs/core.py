@@ -14,11 +14,9 @@ class GenericCog(commands.Cog):
         self.bot = bot
         self.logger = logging.getLogger('bot.py')
 
-    # Create a utility command group
     utility = discord.commands.SlashCommandGroup(
         "utility", 
-        "General utility commands",
-        integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}
+        "General utility commands"
     )
     
     @utility.command(

@@ -50,11 +50,9 @@ class RemindersCog(commands.Cog):
     async def before_check_reminders(self):
         await self.bot.wait_until_ready()
     
-    # Create a reminder command group
     reminder = discord.commands.SlashCommandGroup(
         "reminder", 
-        "Commands for managing reminders",
-        integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}
+        "Commands for managing reminders"
     )
     
     @reminder.command(

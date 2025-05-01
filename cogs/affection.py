@@ -20,11 +20,9 @@ class AffectionCog(commands.Cog):
                         return data.get("url")
                 return None
         
-    # Create an affection command group
     affection = discord.commands.SlashCommandGroup(
         "affection", 
-        "Commands for expressing affection",
-        integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}
+        "Commands for expressing affection"
     )
     
     @affection.command(name="hug", description="Send a virtual hug to someone special")
@@ -350,6 +348,6 @@ class AffectionCog(commands.Cog):
         
         await ctx.respond(embed=embed)
 
-async def setup(bot):
-    await bot.add_cog(AffectionCog(bot))
+def setup(bot):
+    bot.add_cog(AffectionCog(bot))
 

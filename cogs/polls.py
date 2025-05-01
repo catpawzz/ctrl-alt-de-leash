@@ -13,11 +13,9 @@ class PollsCog(commands.Cog):
         self.logger = logging.getLogger('bot.py')
         self.emoji_numbers = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
         
-    # Create a poll command group
     poll = discord.commands.SlashCommandGroup(
         "poll", 
-        "Commands for creating and managing polls",
-        integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}
+        "Commands for creating and managing polls"
     )
     
     @poll.command(

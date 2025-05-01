@@ -14,11 +14,9 @@ class GamesCog(commands.Cog):
         self.bot = bot
         self.logger = logging.getLogger('bot.py')
         
-    # Create a game command group
     game = discord.commands.SlashCommandGroup(
         "game", 
-        "Fun games to play with friends",
-        integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}
+        "Fun games to play with friends"
     )
     
     @game.command(
