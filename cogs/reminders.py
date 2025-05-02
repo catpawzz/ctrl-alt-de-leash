@@ -5,164 +5,148 @@ if __name__ == "__main__":
 import logging
 import discord
 from discord.ext import commands, tasks
-from discord import app_commands
+from discord import SlashCommandGroup
 import datetime
-import asyncio
 import re
+import asyncio
 
 class RemindersCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.logger = logging.getLogger('bot.py')
-        self.reminders = []
+        self.reminders = {}
         self.check_reminders.start()
         
     def cog_unload(self):
         self.check_reminders.cancel()
-    
+        
     @tasks.loop(seconds=30)
     async def check_reminders(self):
-        now = datetime.datetime.now()
-        to_remove = []
-        
-        for reminder in self.reminders:
-            if now >= reminder["time"]:
-                user = self.bot.get_user(reminder["user_id"])
-                if user:
-                    embed = discord.Embed(
-                        title="⏰ Reminder",
-                        description=reminder["message"],
-                        color=discord.Color(0xe898ff)
-                    )
-                    embed.set_footer(text="Ctrl + Alt + De-leash")
-                    embed.timestamp = datetime.datetime.now()
-                    
-                    try:
+        current_time = datetime.datetime.now()
+        for user_id, user_reminders in list(self.reminders.items()):
+            for reminder_id, reminder in list(user_reminders.items()):
+                if current_time >= reminder['time']:
+                    user = self.bot.get_user(user_id)
+                    if user:
+                        embed = discord.Embed(
+                            title="⏰ Reminder",
+                            description=reminder['message'],
+                            color=discord.Color(0xe898ff)
+                        )
+                        embed.set_footer(text=f"Reminder ID: {reminder_id}")
+                        embed.timestamp = current_time
                         await user.send(embed=embed)
-                    except discord.HTTPException:
-                        self.logger.error(f"Failed to send reminder to user {user.id}")
+                    del user_reminders[reminder_id]
+                    if not user_reminders:
+                        del self.reminders[user_id]
                         
-                to_remove.append(reminder)
+    reminder_group = SlashCommandGroup(name="reminder", description="Commands for managing reminders")
+    
+    @reminder_group.command(name="set", description="Set a reminder")
+    async def reminder_set(self, ctx, time: str, message: str):
+        self.logger.info(f"{ctx.author} set a reminder in {ctx.channel} on {ctx.guild}.")
+        
+        # Parse time string
+        time_regex = re.compile(r'(\d+)([hms])')
+        matches = time_regex.findall(time.lower())
+        
+        if not matches:
+            await ctx.respond("Invalid time format. Use format like '1h30m' or '45m'", ephemeral=True)
+            return
+            
+        reminder_time = datetime.datetime.now()
+        for amount, unit in matches:
+            if unit == 'h':
+                reminder_time += datetime.timedelta(hours=int(amount))
+            elif unit == 'm':
+                reminder_time += datetime.timedelta(minutes=int(amount))
+            elif unit == 's':
+                reminder_time += datetime.timedelta(seconds=int(amount))
                 
-        for reminder in to_remove:
-            self.reminders.remove(reminder)
-    
-    @check_reminders.before_loop
-    async def before_check_reminders(self):
-        await self.bot.wait_until_ready()
-    
-    
-    reminder_group = app_commands.Group(name="reminder", description="Commands for managing reminders")
-    
-    @reminder_group.command(name="set", description="Set a new reminder for yourself")
-    async def reminder_set(self, interaction: discord.Interaction, time: str, message: str):
-        self.logger.info(f"{interaction.user} set a reminder in {interaction.channel} on {interaction.guild}.")
-        
-        time_regex = re.compile(r"(\d+)([mhdw])")
-        match = time_regex.match(time)
-        
-        if not match:
-            await interaction.response.send_message("Invalid time format. Use a number followed by m (minutes), h (hours), d (days), or w (weeks).", ephemeral=True)
-            return
+        # Store reminder
+        if ctx.author.id not in self.reminders:
+            self.reminders[ctx.author.id] = {}
             
-        amount, unit = match.groups()
-        amount = int(amount)
+        reminder_id = len(self.reminders[ctx.author.id]) + 1
+        self.reminders[ctx.author.id][reminder_id] = {
+            'time': reminder_time,
+            'message': message
+        }
         
-        if amount <= 0:
-            await interaction.response.send_message("Time amount must be positive.", ephemeral=True)
-            return
-            
-        time_delta = None
-        unit_text = ""
-        
-        if unit == "m":
-            time_delta = datetime.timedelta(minutes=amount)
-            unit_text = f"{amount} minute{'s' if amount != 1 else ''}"
-        elif unit == "h":
-            time_delta = datetime.timedelta(hours=amount)
-            unit_text = f"{amount} hour{'s' if amount != 1 else ''}"
-        elif unit == "d":
-            time_delta = datetime.timedelta(days=amount)
-            unit_text = f"{amount} day{'s' if amount != 1 else ''}"
-        elif unit == "w":
-            time_delta = datetime.timedelta(weeks=amount)
-            unit_text = f"{amount} week{'s' if amount != 1 else ''}"
-            
-        reminder_time = datetime.datetime.now() + time_delta
-        
-        self.reminders.append({
-            "user_id": interaction.user.id,
-            "message": message,
-            "time": reminder_time
-        })
-        
+        # Send confirmation
         embed = discord.Embed(
             title="⏰ Reminder Set",
-            description=f"I'll remind you in {unit_text}.",
+            description=f"I'll remind you about:\n{message}",
             color=discord.Color(0xe898ff)
         )
-        embed.add_field(name="Message", value=message, inline=False)
-        embed.add_field(name="Time", value=reminder_time.strftime("%Y-%m-%d %H:%M:%S"), inline=False)
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.add_field(name="Time", value=time, inline=True)
+        embed.add_field(name="Reminder ID", value=str(reminder_id), inline=True)
+        embed.set_footer(text=f"Reminder set by {ctx.author.display_name}")
         embed.timestamp = datetime.datetime.now()
         
-        await interaction.response.send_message(embed=embed, ephemeral=True)
-    
-    @reminder_group.command(name="list", description="View your active reminders")
-    async def reminder_list(self, interaction: discord.Interaction):
-        user_reminders = [r for r in self.reminders if r["user_id"] == interaction.user.id]
+        await ctx.respond(embed=embed)
         
-        if not user_reminders:
-            await interaction.response.send_message("You have no active reminders.", ephemeral=True)
+    @reminder_group.command(name="list", description="List your active reminders")
+    async def reminder_list(self, ctx):
+        self.logger.info(f"{ctx.author} listed their reminders in {ctx.channel} on {ctx.guild}.")
+        
+        if ctx.author.id not in self.reminders or not self.reminders[ctx.author.id]:
+            await ctx.respond("You don't have any active reminders.", ephemeral=True)
             return
             
         embed = discord.Embed(
-            title="Your Reminders",
-            description=f"You have {len(user_reminders)} active reminder{'s' if len(user_reminders) != 1 else ''}.",
+            title="⏰ Your Reminders",
             color=discord.Color(0xe898ff)
         )
         
-        for i, reminder in enumerate(user_reminders):
-            time_str = reminder["time"].strftime("%Y-%m-%d %H:%M:%S")
+        for reminder_id, reminder in self.reminders[ctx.author.id].items():
+            time_left = reminder['time'] - datetime.datetime.now()
+            hours = time_left.seconds // 3600
+            minutes = (time_left.seconds % 3600) // 60
+            seconds = time_left.seconds % 60
+            
+            time_str = ""
+            if time_left.days > 0:
+                time_str += f"{time_left.days}d "
+            if hours > 0:
+                time_str += f"{hours}h "
+            if minutes > 0:
+                time_str += f"{minutes}m "
+            if seconds > 0:
+                time_str += f"{seconds}s"
+                
             embed.add_field(
-                name=f"Reminder {i+1}",
-                value=f"**Message:** {reminder['message']}\n**Time:** {time_str}",
+                name=f"Reminder {reminder_id}",
+                value=f"Message: {reminder['message']}\nTime left: {time_str}",
                 inline=False
             )
             
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text=f"Reminders for {ctx.author.display_name}")
         embed.timestamp = datetime.datetime.now()
         
-        await interaction.response.send_message(embed=embed, ephemeral=True)
-    
-    @reminder_group.command(name="cancel", description="Cancel one of your active reminders")
-    async def reminder_cancel(self, interaction: discord.Interaction, index: int):
-        user_reminders = [r for r in self.reminders if r["user_id"] == interaction.user.id]
+        await ctx.respond(embed=embed)
         
-        if not user_reminders:
-            await interaction.response.send_message("You have no active reminders to cancel.", ephemeral=True)
+    @reminder_group.command(name="cancel", description="Cancel a reminder")
+    async def reminder_cancel(self, ctx, reminder_id: int):
+        self.logger.info(f"{ctx.author} cancelled a reminder in {ctx.channel} on {ctx.guild}.")
+        
+        if ctx.author.id not in self.reminders or reminder_id not in self.reminders[ctx.author.id]:
+            await ctx.respond(f"Reminder {reminder_id} not found.", ephemeral=True)
             return
             
-        if index < 1 or index > len(user_reminders):
-            await interaction.response.send_message(f"Please provide a valid reminder number between 1 and {len(user_reminders)}.", ephemeral=True)
-            return
+        del self.reminders[ctx.author.id][reminder_id]
+        if not self.reminders[ctx.author.id]:
+            del self.reminders[ctx.author.id]
             
-        reminder = user_reminders[index-1]
-        self.reminders.remove(reminder)
-        
         embed = discord.Embed(
-            title="Reminder Cancelled",
-            description=f"The following reminder has been cancelled:",
+            title="⏰ Reminder Cancelled",
+            description=f"Reminder {reminder_id} has been cancelled.",
             color=discord.Color(0xe898ff)
         )
-        embed.add_field(name="Message", value=reminder["message"], inline=False)
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text=f"Reminder cancelled by {ctx.author.display_name}")
         embed.timestamp = datetime.datetime.now()
         
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+        await ctx.respond(embed=embed)
 
-async def setup(bot):
-    reminder_cog = RemindersCog(bot)
-    await bot.add_cog(reminder_cog)
-    
-    bot.register_app_command_group(reminder_cog.reminder_group)
+def setup(bot):
+    bot.add_cog(RemindersCog(bot))
