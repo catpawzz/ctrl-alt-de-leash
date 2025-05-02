@@ -61,6 +61,14 @@ I like my cat and meow this code is scuffed :3
         """)
         self.logger.info(f"Bot is ready! Logged in as {self.user} (ID: {self.user.id})")
         self.logger.info(f"Bot is in {len(self.guilds)} guilds")
+        unique_users = set()
+        for guild in self.guilds:
+            for member in guild.members:
+                if not member.bot:
+                    unique_users.add(member.id)
+        
+        self.logger.info(f"Bot has been installed by approximately {len(unique_users)} users")
+
         
         display_name = os.getenv('BOT_NAME')
         if display_name and self.user.display_name != display_name:

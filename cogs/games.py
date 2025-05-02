@@ -9,6 +9,7 @@ from discord import SlashCommandGroup
 import random
 import datetime
 import asyncio
+import aiohttp
 
 class GamesCog(commands.Cog):
     def __init__(self, bot):
@@ -69,7 +70,7 @@ class GamesCog(commands.Cog):
         else:
             result = "I win!"
             
-        embed.add_field(name="Result", value=result, inline=False)
+        embed.add_field(name="Result", value=result, inline=False, ephemeral=True)
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
@@ -89,6 +90,62 @@ class GamesCog(commands.Cog):
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed)
+    
+    @game_group.command(name="wouldyourather", description="Get a random Would You Rather question")
+    async def would_you_rather(self, ctx):
+        api_url = "https://api.cat-space.net/api/text/wouldyourather"
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(api_url) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        question = data["question"]
+                        
+                        embed = discord.Embed(
+                            title="🤔 Would You Rather",
+                            description=question,
+                            color=discord.Color(0xe898ff)
+                        )
+                        
+                        embed.set_footer(text="Ctrl + Alt + De-leash")
+                        embed.timestamp = datetime.datetime.now()
+                        
+                        await ctx.respond(embed=embed)
+                    else:
+                        await ctx.respond(f"Failed to fetch Would You Rather question. API returned status code {response.status}.", ephemeral=True)
+        except Exception as e:
+            self.logger.error(f"Error fetching Would You Rather: {e}")
+            await ctx.respond("An error occurred while trying to fetch a Would You Rather question.", ephemeral=True)
+    
+    @game_group.command(name="truthordare", description="Play Truth or Dare")
+    @discord.option(name="choice", description="Truth or Dare", choices=["truth", "dare"])
+    async def truth_or_dare(self, ctx, choice: str):
+        api_url = f"https://api.cat-space.net/api/text/truthordare/{choice}"
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(api_url) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        question = data["question"]
+                        title = "🔍 Truth" if choice == "truth" else "🔥 Dare"
+                        
+                        embed = discord.Embed(
+                            title=title,
+                            description=question,
+                            color=discord.Color(0xe898ff)
+                        )
+                        
+                        embed.set_footer(text="Ctrl + Alt + De-leash")
+                        embed.timestamp = datetime.datetime.now()
+                        
+                        await ctx.respond(embed=embed)
+                    else:
+                        await ctx.respond(f"Failed to fetch {choice} question. API returned status code {response.status}.", ephemeral=True)
+        except Exception as e:
+            self.logger.error(f"Error fetching truth or dare: {e}")
+            await ctx.respond(f"An error occurred while trying to fetch a {choice} question.", ephemeral=True)
 
 def setup(bot):
     bot.add_cog(GamesCog(bot))
