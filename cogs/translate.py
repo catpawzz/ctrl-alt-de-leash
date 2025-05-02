@@ -20,9 +20,9 @@ class TranslateCog(commands.Cog):
                            source_lang: Option(str, "Source language (leave blank for auto-detect)", required=False, default=None)):
         try:
             if source_lang is None:
-                result = await self.translator.translate(text, dest=target_lang)
+                result = self.translator.translate(text, dest=target_lang)
             else:
-                result = await self.translator.translate(text, src=source_lang, dest=target_lang)
+                result = self.translator.translate(text, src=source_lang, dest=target_lang)
                 
             source_language = self.languages.get(result.src, result.src)
             target_language = self.languages.get(result.dest, result.dest)
