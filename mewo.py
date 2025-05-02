@@ -21,6 +21,7 @@ class Bot(commands.AutoShardedBot):
         intents.members = True
         intents.message_content = True
         intents.reactions = True
+        intents.dm_messages = True
         super().__init__(
             intents=intents,
             sync_commands=True,

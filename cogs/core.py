@@ -27,7 +27,7 @@ class CoreCog(commands.Cog):
         )
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
-        await ctx.respond(embed=embed)
+        await ctx.respond(embed=embed, ephemeral=True)
     
     @core_group.command(name="uptime", description="Check how long the bot has been running")
     async def uptime(self, ctx):
@@ -42,7 +42,7 @@ class CoreCog(commands.Cog):
         )
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
-        await ctx.respond(embed=embed)
+        await ctx.respond(embed=embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(CoreCog(bot))
