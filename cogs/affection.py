@@ -1,3 +1,7 @@
+if __name__ == "__main__":
+    print("This is a cog file and cannot be run directly.")
+    exit()
+
 import logging
 import discord
 from discord.ext import commands
