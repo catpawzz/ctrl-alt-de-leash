@@ -46,17 +46,17 @@ class Bot(commands.AutoShardedBot):
         
     async def on_ready(self):
         print("""
-               ::::::::      :::     :::::::::  :::  
-             :+:    :+:   :+: :+:   :+:    :+: :+:   
-            +:+         +:+   +:+  +:+    +:+ +:+    
-           +#+        +#++:++#++: +#+    +:+ +#+     
-          +#+        +#+     +#+ +#+    +#+ +#+      
-         #+#    #+# #+#     #+# #+#    #+# #+#       
-        ########  ###     ### #########  ########## 
-        -------------------------------------------------
-        Made by @catpawzz and @Snupai
-        I like my cat and meow this code is scuffed :3
-        -------------------------------------------------
+       ::::::::      :::     :::::::::  :::  
+     :+:    :+:   :+: :+:   :+:    :+: :+:   
+    +:+         +:+   +:+  +:+    +:+ +:+    
+   +#+        +#++:++#++: +#+    +:+ +#+     
+  +#+        +#+     +#+ +#+    +#+ +#+      
+ #+#    #+# #+#     #+# #+#    #+# #+#       
+########  ###     ### #########  ########## 
+-------------------------------------------------
+Made by @catpawzz and @Snupai
+I like my cat and meow this code is scuffed :3
+-------------------------------------------------
         """)
         self.logger.info(f"Bot is ready! Logged in as {self.user} (ID: {self.user.id})")
         self.logger.info(f"Bot is in {len(self.guilds)} guilds")
