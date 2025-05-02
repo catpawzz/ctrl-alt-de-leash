@@ -5,6 +5,7 @@ if __name__ == "__main__":
 import logging
 import discord
 from discord.ext import commands, tasks
+from discord import app_commands
 import datetime
 import asyncio
 import re
@@ -50,30 +51,25 @@ class RemindersCog(commands.Cog):
     async def before_check_reminders(self):
         await self.bot.wait_until_ready()
     
-    reminder = discord.commands.SlashCommandGroup(
-        "reminder", 
-        "Commands for managing reminders"
-    )
     
-    @reminder.command(
-        name="set",
-        description="Set a new reminder for yourself"
-    )
-    async def reminder_set(self, ctx, time: str, *, message: str):
-        self.logger.info(f"{ctx.author} set a reminder in {ctx.channel} on {ctx.guild}.")
+    reminder_group = app_commands.Group(name="reminder", description="Commands for managing reminders")
+    
+    @reminder_group.command(name="set", description="Set a new reminder for yourself")
+    async def reminder_set(self, interaction: discord.Interaction, time: str, message: str):
+        self.logger.info(f"{interaction.user} set a reminder in {interaction.channel} on {interaction.guild}.")
         
         time_regex = re.compile(r"(\d+)([mhdw])")
         match = time_regex.match(time)
         
         if not match:
-            await ctx.respond("Invalid time format. Use a number followed by m (minutes), h (hours), d (days), or w (weeks).", ephemeral=True)
+            await interaction.response.send_message("Invalid time format. Use a number followed by m (minutes), h (hours), d (days), or w (weeks).", ephemeral=True)
             return
             
         amount, unit = match.groups()
         amount = int(amount)
         
         if amount <= 0:
-            await ctx.respond("Time amount must be positive.", ephemeral=True)
+            await interaction.response.send_message("Time amount must be positive.", ephemeral=True)
             return
             
         time_delta = None
@@ -95,7 +91,7 @@ class RemindersCog(commands.Cog):
         reminder_time = datetime.datetime.now() + time_delta
         
         self.reminders.append({
-            "user_id": ctx.author.id,
+            "user_id": interaction.user.id,
             "message": message,
             "time": reminder_time
         })
@@ -110,17 +106,14 @@ class RemindersCog(commands.Cog):
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
-        await ctx.respond(embed=embed, ephemeral=True)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
     
-    @reminder.command(
-        name="list",
-        description="View your active reminders"
-    )
-    async def reminder_list(self, ctx):
-        user_reminders = [r for r in self.reminders if r["user_id"] == ctx.author.id]
+    @reminder_group.command(name="list", description="View your active reminders")
+    async def reminder_list(self, interaction: discord.Interaction):
+        user_reminders = [r for r in self.reminders if r["user_id"] == interaction.user.id]
         
         if not user_reminders:
-            await ctx.respond("You have no active reminders.", ephemeral=True)
+            await interaction.response.send_message("You have no active reminders.", ephemeral=True)
             return
             
         embed = discord.Embed(
@@ -140,21 +133,18 @@ class RemindersCog(commands.Cog):
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
-        await ctx.respond(embed=embed, ephemeral=True)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
     
-    @reminder.command(
-        name="cancel",
-        description="Cancel one of your active reminders"
-    )
-    async def reminder_cancel(self, ctx, index: int):
-        user_reminders = [r for r in self.reminders if r["user_id"] == ctx.author.id]
+    @reminder_group.command(name="cancel", description="Cancel one of your active reminders")
+    async def reminder_cancel(self, interaction: discord.Interaction, index: int):
+        user_reminders = [r for r in self.reminders if r["user_id"] == interaction.user.id]
         
         if not user_reminders:
-            await ctx.respond("You have no active reminders to cancel.", ephemeral=True)
+            await interaction.response.send_message("You have no active reminders to cancel.", ephemeral=True)
             return
             
         if index < 1 or index > len(user_reminders):
-            await ctx.respond(f"Please provide a valid reminder number between 1 and {len(user_reminders)}.", ephemeral=True)
+            await interaction.response.send_message(f"Please provide a valid reminder number between 1 and {len(user_reminders)}.", ephemeral=True)
             return
             
         reminder = user_reminders[index-1]
@@ -169,7 +159,10 @@ class RemindersCog(commands.Cog):
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
-        await ctx.respond(embed=embed, ephemeral=True)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
-def setup(bot):
-    bot.add_cog(RemindersCog(bot))
+async def setup(bot):
+    reminder_cog = RemindersCog(bot)
+    await bot.add_cog(reminder_cog)
+    
+    bot.register_app_command_group(reminder_cog.reminder_group)

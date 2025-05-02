@@ -5,70 +5,50 @@ if __name__ == "__main__":
 import logging
 import discord
 from discord.ext import commands
-from discord.ui import Button, View
+from discord import app_commands
 import datetime
 import time
 
-class GenericCog(commands.Cog):
+class CoreCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.logger = logging.getLogger('bot.py')
-
-    utility = discord.commands.SlashCommandGroup(
-        "utility", 
-        "General utility commands"
-    )
+        self.start_time = time.time()
+        
+    core_group = app_commands.Group(name="core", description="Core bot commands")
     
-    @utility.command(
-        name="ping",
-        description="Check the bot's response time and latency"
-    )
-    async def ping(self, ctx):
-        self.logger.info(f"{ctx.author} used /utility ping command in {ctx.channel} on {ctx.guild}.")
-        
-        discord_latency = self.bot.latency * 1000
-        
-        start_time = time.perf_counter()
-        initial_response = await ctx.respond("Measuring latency...", ephemeral=True)
-        rest_latency = (time.perf_counter() - start_time) * 1000
-        
-        edit_start_time = time.perf_counter()
-        response_message = await initial_response.original_response()
-        await response_message.edit(content="Updating ping details...")
-        edit_latency = (time.perf_counter() - edit_start_time) * 1000
-        
+    @core_group.command(name="ping", description="Check the bot's latency")
+    async def ping(self, interaction: discord.Interaction):
+        latency = round(self.bot.latency * 1000)
         embed = discord.Embed(
-            title="Bot Latency",
-            description=(
-                f":pencil: Edit message: `{edit_latency:.0f}ms`\n"
-                f":eyes: Discord: `{discord_latency:.0f}ms`\n"
-                f":inbox_tray: RestAction: `{rest_latency:.0f}ms`"
-            ),
+            title="🏓 Pong!",
+            description=f"Latency: {latency}ms",
             color=discord.Color(0xe898ff)
         )
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
-        
-        await response_message.edit(content=None, embed=embed)
-
-    @utility.command(
-        name="uptime",
-        description="Returns the bot's uptime"
-    )
-    async def uptime(self, ctx: discord.ApplicationContext):
+        await interaction.response.send_message(embed=embed)
+    
+    @core_group.command(name="uptime", description="Check how long the bot has been running")
+    async def uptime(self, interaction: discord.Interaction):
         current_time = time.time()
-        uptime_seconds = int(current_time - self.bot.start_time)
-        uptime_string = str(datetime.timedelta(seconds=uptime_seconds))
+        difference = int(round(current_time - self.bot.start_time))
+        uptime_str = str(datetime.timedelta(seconds=difference))
         
         embed = discord.Embed(
-            title="Bot Uptime",
-            description=f"I've been online for: `{uptime_string}`",
+            title="⏱️ Bot Uptime",
+            description=f"I've been online for: **{uptime_str}**",
             color=discord.Color(0xe898ff)
         )
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
-        
-        await ctx.respond(embed=embed, ephemeral=True)
-        
-def setup(bot):
-    bot.add_cog(GenericCog(bot))
+        await interaction.response.send_message(embed=embed)
+
+async def setup(bot):
+    core_cog = CoreCog(bot)
+    await bot.add_cog(core_cog)
+    
+    
+    success = bot.register_app_command_group(core_cog.core_group)
+    if not success:
+        bot.logger.warning("Core commands were not registered due to a duplicate")

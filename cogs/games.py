@@ -5,6 +5,7 @@ if __name__ == "__main__":
 import logging
 import discord
 from discord.ext import commands
+from discord import app_commands
 import random
 import datetime
 import asyncio
@@ -14,22 +15,16 @@ class GamesCog(commands.Cog):
         self.bot = bot
         self.logger = logging.getLogger('bot.py')
         
-    game = discord.commands.SlashCommandGroup(
-        "game", 
-        "Fun games to play with friends"
-    )
+    game_group = app_commands.Group(name="game", description="Fun games to play with friends")
     
-    @game.command(
-        name="roll",
-        description="Roll one or more dice with the specified number of sides"
-    )
-    async def roll(self, ctx, dice: int = 1, sides: int = 6):
+    @game_group.command(name="roll", description="Roll one or more dice with the specified number of sides")
+    async def roll(self, interaction: discord.Interaction, dice: int = 1, sides: int = 6):
         if dice < 1 or dice > 10:
-            await ctx.respond("Please roll between 1 and 10 dice.", ephemeral=True)
+            await interaction.response.send_message("Please roll between 1 and 10 dice.", ephemeral=True)
             return
             
         if sides < 2 or sides > 100:
-            await ctx.respond("Dice must have between 2 and 100 sides.", ephemeral=True)
+            await interaction.response.send_message("Dice must have between 2 and 100 sides.", ephemeral=True)
             return
             
         results = [random.randint(1, sides) for _ in range(dice)]
@@ -50,13 +45,15 @@ class GamesCog(commands.Cog):
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
-        await ctx.respond(embed=embed)
+        await interaction.response.send_message(embed=embed)
     
-    @game.command(
-        name="rps",
-        description="Play rock-paper-scissors against the bot"
-    )
-    async def rps(self, ctx, choice: discord.Option(str, "Choose your weapon", choices=["rock", "paper", "scissors"])):
+    @game_group.command(name="rps", description="Play rock-paper-scissors against the bot")
+    @app_commands.choices(choice=[
+        app_commands.Choice(name="Rock", value="rock"),
+        app_commands.Choice(name="Paper", value="paper"),
+        app_commands.Choice(name="Scissors", value="scissors"),
+    ])
+    async def rps(self, interaction: discord.Interaction, choice: str):
         bot_choice = random.choice(["rock", "paper", "scissors"])
         
         embed = discord.Embed(
@@ -80,13 +77,10 @@ class GamesCog(commands.Cog):
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
-        await ctx.respond(embed=embed)
+        await interaction.response.send_message(embed=embed)
     
-    @game.command(
-        name="coinflip",
-        description="Flip a coin"
-    )
-    async def coinflip(self, ctx):
+    @game_group.command(name="coinflip", description="Flip a coin")
+    async def coinflip(self, interaction: discord.Interaction):
         result = random.choice(["Heads", "Tails"])
         
         embed = discord.Embed(
@@ -98,7 +92,9 @@ class GamesCog(commands.Cog):
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.datetime.now()
         
-        await ctx.respond(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
-def setup(bot):
-    bot.add_cog(GamesCog(bot))
+async def setup(bot):
+    games_cog = GamesCog(bot)
+    await bot.add_cog(games_cog)
+    bot.register_app_command_group(games_cog.game_group)
