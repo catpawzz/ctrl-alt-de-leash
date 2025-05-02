@@ -156,6 +156,222 @@ class ActionsCog(commands.Cog):
         embed.set_footer(text="Ctrl + Alt + De-leash")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="cry", description="Cry in front of someone")
+    async def cry(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} cried in front of {user} using /actions cry command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("cry")
+        if file is None:
+            await ctx.respond("Could not fetch cry GIF.")
+            return
+        embed = discord.Embed(
+            title="Crying!", 
+            description=f"{ctx.author.mention} is crying in front of {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="dance", description="Dance with someone")
+    async def dance(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} is dancing with {user} using /actions dance command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("dance")
+        if file is None:
+            await ctx.respond("Could not fetch dance GIF.")
+            return
+        embed = discord.Embed(
+            title="Dancing!", 
+            description=f"{ctx.author.mention} is dancing with {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="fluff", description="Fluff someone's fur or hair")
+    async def fluff(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} fluffed {user} using /actions fluff command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("fluff")
+        if file is None:
+            await ctx.respond("Could not fetch fluff GIF.")
+            return
+        embed = discord.Embed(
+            title="Fluff!", 
+            description=f"{ctx.author.mention} fluffed {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="kiss", description="Give someone a kiss")
+    async def kiss(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} kissed {user} using /actions kiss command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("kiss")
+        if file is None:
+            await ctx.respond("Could not fetch kiss GIF.")
+            return
+        embed = discord.Embed(
+            title="Kiss!", 
+            description=f"{ctx.author.mention} kissed {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="lay", description="Lay down with someone")
+    async def lay(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} is laying with {user} using /actions lay command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("lay")
+        if file is None:
+            await ctx.respond("Could not fetch lay GIF.")
+            return
+        embed = discord.Embed(
+            title="Laying Down!", 
+            description=f"{ctx.author.mention} is laying with {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="lick", description="Give someone a lick")
+    async def lick(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} licked {user} using /actions lick command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("lick")
+        if file is None:
+            await ctx.respond("Could not fetch lick GIF.")
+            return
+        embed = discord.Embed(
+            title="Lick!", 
+            description=f"{ctx.author.mention} licked {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="poke", description="Poke someone playfully")
+    async def poke(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} poked {user} using /actions poke command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("poke")
+        if file is None:
+            await ctx.respond("Could not fetch poke GIF.")
+            return
+        embed = discord.Embed(
+            title="Poke!", 
+            description=f"{ctx.author.mention} poked {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="pout", description="Pout at someone")
+    async def pout(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} pouted at {user} using /actions pout command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("pout")
+        if file is None:
+            await ctx.respond("Could not fetch pout GIF.")
+            return
+        embed = discord.Embed(
+            title="Pouty!", 
+            description=f"{ctx.author.mention} is pouting at {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="slap", description="Slap someone")
+    async def slap(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} slapped {user} using /actions slap command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("slap")
+        if file is None:
+            await ctx.respond("Could not fetch slap GIF.")
+            return
+        embed = discord.Embed(
+            title="Slap!", 
+            description=f"{ctx.author.mention} slapped {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="smile", description="Smile at someone")
+    async def smile(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} smiled at {user} using /actions smile command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("smile")
+        if file is None:
+            await ctx.respond("Could not fetch smile GIF.")
+            return
+        embed = discord.Embed(
+            title="Smile!", 
+            description=f"{ctx.author.mention} is smiling at {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="tail", description="Wag your tail at someone")
+    async def tail(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} wagged their tail at {user} using /actions tail command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("tail")
+        if file is None:
+            await ctx.respond("Could not fetch tail GIF.")
+            return
+        embed = discord.Embed(
+            title="Tail Wag!", 
+            description=f"{ctx.author.mention} is wagging their tail at {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
+    
+    @actions_group.command(name="tickle", description="Tickle someone")
+    async def tickle(self, ctx, user: discord.Member):
+        self.logger.info(f"{ctx.author} tickled {user} using /actions tickle command in {ctx.channel} on {ctx.guild}.")
+        
+        file = await self.get_action_gif("tickle")
+        if file is None:
+            await ctx.respond("Could not fetch tickle GIF.")
+            return
+        embed = discord.Embed(
+            title="Tickle!", 
+            description=f"{ctx.author.mention} tickled {user.mention}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=f"attachment://{file.filename}")
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.now()
+        await ctx.respond(embed=embed, file=file)
 
 def setup(bot):
     bot.add_cog(ActionsCog(bot))
