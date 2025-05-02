@@ -10,6 +10,7 @@ import time
 import sys
 import asyncio
 import signal
+import colorlog
 
 
 load_dotenv()
@@ -19,7 +20,7 @@ class Bot(commands.AutoShardedBot):
         intents = discord.Intents.default()
         intents.members = True
         intents.message_content = True
-        
+        intents.reactions = True
         super().__init__(
             intents=intents,
             sync_commands=True,
@@ -58,11 +59,65 @@ class Bot(commands.AutoShardedBot):
 def setup_logger():
     logger = logging.getLogger('mewo.py')
     logger.setLevel(logging.DEBUG)
+    
+    # Console handler with colors
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    console_handler.setFormatter(formatter)
+    
+    # Color formatter with emojis
+    color_formatter = colorlog.ColoredFormatter(
+        '%(log_color)s[%(asctime)s] %(levelname)-2s%(reset)s: %(message_emoji)s',
+        datefmt='%H:%M:%S',
+        log_colors={
+            'DEBUG': 'blue',
+            'INFO': 'green',
+            'WARNING': 'yellow',
+            'ERROR': 'red',
+            'CRITICAL': 'bold_red,bg_white',
+        },
+        secondary_log_colors={},
+        style='%'
+    )
+    
+    # Custom filter to add emojis based on log level
+    class EmojiFilter(logging.Filter):
+        def filter(self, record):
+            if record.levelno == logging.DEBUG:
+                record.message_emoji = f"🔍 {record.msg}"
+            elif record.levelno == logging.INFO:
+                record.message_emoji = f"ℹ️ {record.msg}"
+            elif record.levelno == logging.WARNING:
+                record.message_emoji = f"⚠️ {record.msg}"
+            elif record.levelno == logging.ERROR:
+                record.message_emoji = f"❌ {record.msg}"
+            elif record.levelno == logging.CRITICAL:
+                record.message_emoji = f"🚨 {record.msg}"
+            else:
+                record.message_emoji = record.msg
+            return True
+    
+    emoji_filter = EmojiFilter()
+    console_handler.addFilter(emoji_filter)
+    console_handler.setFormatter(color_formatter)
+    
+    # File handler for persistent logs
+    log_dir = os.path.join(os.path.dirname(__file__), 'logs')
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    
+    file_handler = logging.FileHandler(
+        os.path.join(log_dir, f'bot_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}.log')
+    )
+    file_handler.setLevel(logging.DEBUG)
+    file_formatter = logging.Formatter('[%(asctime)s] %(levelname)-2s: %(message_emoji)s', 
+                                      datefmt='%H:%M:%S')
+    file_handler.addFilter(emoji_filter)
+    file_handler.setFormatter(file_formatter)
+    
+    # Add both handlers to logger
     logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+    
     return logger
 
 def run_bot():
@@ -72,6 +127,7 @@ def run_bot():
     # Debug token loading
     token = os.getenv('BOT_TOKEN')
     if not token:
+        bot.logger.critical("No BOT_TOKEN found in environment variables")
         print("❌ No BOT_TOKEN found in environment variables")
         sys.exit(1)
     
@@ -83,6 +139,7 @@ def run_bot():
     
     # Set up signal handlers
     def signal_handler(signum, frame):
+        bot.logger.warning("Received shutdown signal. Gracefully shutting down...")
         print("\n🛑 Received shutdown signal. Gracefully shutting down...")
         bot._shutdown = True
         asyncio.create_task(bot.close())
@@ -93,8 +150,8 @@ def run_bot():
     try:
         bot.run(os.getenv('BOT_TOKEN'))
     except Exception as e:
-        print(f"\n❌ Critical error running bot: {e}")  
-        bot.logger.error(f"Critical error running bot: {e}")
+        bot.logger.critical(f"Critical error running bot: {e}")
+        print(f"\n❌ Critical error running bot: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

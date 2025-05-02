@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "colorlog>=6.9.0",
     "py-cord>=2.6.1",
     "python-dotenv>=1.1.0",
 ]
