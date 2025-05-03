@@ -146,6 +146,30 @@ class GamesCog(commands.Cog):
         except Exception as e:
             self.logger.error(f"Error fetching truth or dare: {e}")
             await ctx.respond(f"An error occurred while trying to fetch a {choice} question.", ephemeral=True)
+    
+    @game_group.command(name="8ball", description="Ask the Magic 8-Ball a question")
+    async def eightball(self, ctx, question: discord.Option(str, "Your question", required=True)):
+        responses = [
+            "It is certain.", "It is decidedly so.", "Without a doubt.",
+            "Yes – definitely.", "You may rely on it.", "As I see it, yes.",
+            "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.",
+            "Reply hazy, try again.", "Ask again later.", "Better not tell you now.",
+            "Cannot predict now.", "Concentrate and ask again.",
+            "Don't count on it.", "My reply is no.", "My sources say no.",
+            "Outlook not so good.", "Very doubtful."
+        ]
+        
+        response = random.choice(responses)
+        embed = discord.Embed(
+                title="🎱 Magic 8-Ball",
+                color=discord.Color(0xe898ff)
+                )
+        embed.add_field(name="Question", value=question, inline=False)
+        embed.add_field(name="Answer", value=response, inline=False)
+        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.timestamp = datetime.datetime.now()
+        
+        await ctx.respond(embed=embed)
 
 def setup(bot):
     bot.add_cog(GamesCog(bot))
