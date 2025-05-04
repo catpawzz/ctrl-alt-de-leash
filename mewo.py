@@ -46,7 +46,7 @@ class Bot(commands.AutoShardedBot):
                     print(f"Error: {str(e)}")
         
     async def on_ready(self):
-        print("""
+        print("""\033[95m
        ::::::::      :::     :::::::::  :::  
      :+:    :+:   :+: :+:   :+:    :+: :+:   
     +:+         +:+   +:+  +:+    +:+ +:+    
@@ -54,20 +54,18 @@ class Bot(commands.AutoShardedBot):
   +#+        +#+     +#+ +#+    +#+ +#+      
  #+#    #+# #+#     #+# #+#    #+# #+#       
 ########  ###     ### #########  ########## 
--------------------------------------------------
-Made by @catpawzz and @Snupai
+\033[97m-------------------------------------------------
+\033[90mMade by @catpawzz and @Snupai
 I like my cat and meow this code is scuffed :3
--------------------------------------------------
+\033[97m-------------------------------------------------
+\033[91mWARNING: Please make sure this bot can only be
+     installed as a user app, not on a server!
+     It is not ready for that yet.          
+\033[97m-------------------------------------------------\033[0m
         """)
         self.logger.info(f"Bot is ready! Logged in as {self.user} (ID: {self.user.id})")
         self.logger.info(f"Bot is in {len(self.guilds)} guilds")
-        unique_users = set()
-        for guild in self.guilds:
-            for member in guild.members:
-                if not member.bot:
-                    unique_users.add(member.id)
-        
-        self.logger.info(f"Bot has been installed by approximately {len(unique_users)} users")
+        self.logger.info(f"Bot has been installed by {len(self.users)} users")
 
         
         display_name = os.getenv('BOT_NAME')
@@ -144,7 +142,7 @@ def setup_logger():
 
 def run_bot():
     bot = Bot()
-    bot.logger.info("Starting bot...")
+    bot.logger.info("Starting application...")
     
     # Debug token loading
     token = os.getenv('BOT_TOKEN')
