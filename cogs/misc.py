@@ -290,7 +290,7 @@ class MiscCog(commands.Cog):
                                 inline=False
                             )
                     
-                    embed.set_footer(text="Source: Wikipedia | Ctrl + Alt + De-leash")
+                    embed.set_footer(text="Source: Wikipedia • Ctrl + Alt + De-leash")
                     embed.timestamp = datetime.datetime.now()
                     
                     await ctx.respond(embed=embed)
