@@ -2,6 +2,7 @@ if __name__ == "__main__":
     print("This is a cog file and cannot be run directly.")
     exit()
 
+import io
 import logging
 import discord
 from discord.ext import commands
@@ -290,7 +291,7 @@ class MiscCog(commands.Cog):
                                 inline=False
                             )
                     
-                    embed.set_footer(text="Source: Wikipedia | Ctrl + Alt + De-leash")
+                    embed.set_footer(text="Source: Wikipedia • Ctrl + Alt + De-leash")
                     embed.timestamp = datetime.datetime.now()
                     
                     await ctx.respond(embed=embed)
@@ -500,6 +501,51 @@ class MiscCog(commands.Cog):
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed)
+
+    @misc_group.command(name="randomcat", description="Get a random cat picture")
+    async def randomcat(self, ctx, cat: discord.Option(str, "Cat to display", 
+                                                          choices=["yumi"], 
+                                                          required=True, 
+                                                          default="yumi")):
+            await ctx.defer()
+            
+            api_url = f"https://api.cat-space.net/api/sfw/images/cat-{cat}"
+            
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(api_url) as response:
+                        if response.status == 200:
+                            data = await response.json()
+                            
+                            if data.get("status") == "success" and data.get("url"):
+                                image_url = data["url"]
+                                
+                                # Download the image
+                                async with session.get(image_url) as img_resp:
+                                    if img_resp.status == 200:
+                                        image_data = await img_resp.read()
+                                        file_type = image_url.split(".")[-1]
+                                        file = discord.File(io.BytesIO(image_data), filename=f"cat.{file_type}")
+                                        
+                                        embed = discord.Embed(
+                                            title=f"Random {cat.capitalize()} Cat Picture",
+                                            color=discord.Color(0xe898ff)
+                                        )
+                                        embed.set_image(url=f"attachment://cat.{file_type}")
+                                        embed.set_footer(text="Ctrl + Alt + De-leash")
+                                        embed.timestamp = datetime.datetime.now()
+                                        
+                                        await ctx.respond(embed=embed, file=file)
+                                    else:
+                                        await ctx.respond(f"Failed to download the cat picture (HTTP {img_resp.status})")
+                            else:
+                                await ctx.respond(f"Failed to get a cat picture: {data.get('status', 'Unknown error')}")
+                        else:
+                            await ctx.respond(f"Failed to fetch cat picture (HTTP {response.status})")
+            
+            except Exception as e:
+                self.logger.error(f"Error fetching cat picture: {str(e)}")
+                await ctx.respond(f"An error occurred while fetching a cat picture: {str(e)}")
 
 def setup(bot):
     bot.add_cog(MiscCog(bot))
