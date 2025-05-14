@@ -501,5 +501,39 @@ class MiscCog(commands.Cog):
         
         await ctx.respond(embed=embed)
 
+        @misc_group.command(name="randomcat", description="Get a random cat picture")
+        async def randomcat(self, ctx, cat: discord.Option(str, "Cat to display", 
+                                                          choices=["yumi"], 
+                                                          required=True, 
+                                                          default="yumi")):
+            await ctx.defer()
+            
+            api_url = f"https://api.cat-space.net/api/sfw/images/cat-{cat}"
+            
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(api_url) as response:
+                        if response.status == 200:
+                            data = await response.json()
+                            
+                            if data.get("status") == "success" and data.get("url"):
+                                embed = discord.Embed(
+                                    title=f"Random {cat.capitalize()} Cat Picture",
+                                    color=discord.Color(0xe898ff)
+                                )
+                                embed.set_image(url=data["url"])
+                                embed.set_footer(text="Ctrl + Alt + De-leash")
+                                embed.timestamp = datetime.datetime.now()
+                                
+                                await ctx.respond(embed=embed)
+                            else:
+                                await ctx.respond(f"Failed to get a cat picture: {data.get('status', 'Unknown error')}")
+                        else:
+                            await ctx.respond(f"Failed to fetch cat picture (HTTP {response.status})")
+            
+            except Exception as e:
+                self.logger.error(f"Error fetching cat picture: {str(e)}")
+                await ctx.respond(f"An error occurred while fetching a cat picture: {str(e)}")
+
 def setup(bot):
     bot.add_cog(MiscCog(bot))
