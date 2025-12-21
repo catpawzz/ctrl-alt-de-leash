@@ -50,9 +50,9 @@ sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
 
 # Download and build Python 3.12
 cd /tmp
-wget https://www.python.org/ftp/python/3.12.0/Python-3.12.0.tgz
-tar -xf Python-3.12.0.tgz
-cd Python-3.12.0
+wget https://www.python.org/ftp/python/3.12.7/Python-3.12.7.tgz
+tar -xf Python-3.12.7.tgz
+cd Python-3.12.7
 ./configure --enable-optimizations
 make -j $(nproc)
 sudo make altinstall
@@ -77,9 +77,9 @@ echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 # Reload shell
 source ~/.bashrc
 
-# Install Python 3.12
-pyenv install 3.12.0
-pyenv global 3.12.0
+# Install Python 3.12 (check latest version with: pyenv install --list | grep '  3.12')
+pyenv install 3.12.7
+pyenv global 3.12.7
 ```
 
 ### Step 2: Clone the Repository
@@ -158,7 +158,7 @@ Type=simple
 User=your-username
 WorkingDirectory=/path/to/ctrl-alt-de-leash
 Environment="PATH=/path/to/ctrl-alt-de-leash/venv/bin"
-ExecStart=/path/to/ctrl-alt-de-leash/venv/bin/python3.12 mewo.py
+ExecStart=/path/to/ctrl-alt-de-leash/venv/bin/python mewo.py
 Restart=on-failure
 RestartSec=10
 
