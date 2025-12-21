@@ -25,7 +25,14 @@ Like ctrl+alt+delete but way more brutal. This bot doesn't just end tasks—it j
 
 Debian's default repositories may not have Python 3.12. Here are the recommended methods:
 
-#### Option A: Using deadsnakes PPA (Recommended for Ubuntu-based systems)
+#### Option A: Using Debian Testing/Unstable (For experienced users)
+```bash
+# Add testing repository (only if you know what you're doing)
+echo "deb http://deb.debian.org/debian testing main" | sudo tee /etc/apt/sources.list.d/testing.list
+sudo apt update
+sudo apt install -y python3.12 python3.12-venv python3.12-dev
+```
+**Note:** This may upgrade other packages. For Ubuntu-based systems, use deadsnakes PPA instead:
 ```bash
 sudo apt update
 sudo apt install -y software-properties-common
@@ -34,7 +41,7 @@ sudo apt update
 sudo apt install -y python3.12 python3.12-venv python3.12-dev
 ```
 
-#### Option B: Build from source
+#### Option B: Build from source (Recommended for Debian Stable)
 ```bash
 # Install build dependencies
 sudo apt update
@@ -191,6 +198,12 @@ uv sync --reinstall
 # With pip
 pip install --force-reinstall -r requirements.txt
 ```
+
+**Note:** If you see "Failed to load extension: ai.py" with a `ModuleNotFoundError: No module named 'google'`, this is expected if you haven't set up the Google AI API. The AI extension is optional and requires:
+```bash
+pip install google-generativeai
+```
+Then add your `GOOGLE_AI_API_KEY` to the `.env` file.
 
 #### Permission issues
 Make sure the bot has write permissions for the `logs` directory and `reminders.json`:
