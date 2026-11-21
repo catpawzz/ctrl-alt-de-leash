@@ -38,7 +38,7 @@ class MiscCog(commands.Cog):
         )
         
         embed.add_field(name="All Options", value="\n".join([f"• {option}" for option in choices]), inline=False)
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed)
@@ -115,7 +115,7 @@ class MiscCog(commands.Cog):
             self.logger.error(f"Error fetching Wakapi stats: {str(e)}")
             embed.add_field(name="Error", value=f"Failed to fetch detailed stats: {str(e)}", inline=False)
         
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed)
@@ -199,7 +199,7 @@ class MiscCog(commands.Cog):
                             color=discord.Color(0xe898ff)
                         )
                     
-                    embed.set_footer(text="Ctrl + Alt + De-leash")
+                    embed.set_footer(text="Marsh")
                     embed.timestamp = datetime.datetime.now()
                     
                     await ctx.respond(embed=embed)
@@ -239,7 +239,7 @@ class MiscCog(commands.Cog):
                             description=f"No results found for '{query}'",
                             color=discord.Color(0xe898ff)
                         )
-                        embed.set_footer(text="Ctrl + Alt + De-leash")
+                        embed.set_footer(text="Marsh")
                         embed.timestamp = datetime.datetime.now()
                         await ctx.respond(embed=embed)
                         return
@@ -291,7 +291,7 @@ class MiscCog(commands.Cog):
                                 inline=False
                             )
                     
-                    embed.set_footer(text="Source: Wikipedia • Ctrl + Alt + De-leash")
+                    embed.set_footer(text="Source: Wikipedia • Marsh")
                     embed.timestamp = datetime.datetime.now()
                     
                     await ctx.respond(embed=embed)
@@ -497,7 +497,7 @@ class MiscCog(commands.Cog):
                 inline=False
             )
             
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed)
@@ -532,7 +532,7 @@ class MiscCog(commands.Cog):
                                             color=discord.Color(0xe898ff)
                                         )
                                         embed.set_image(url=f"attachment://cat.{file_type}")
-                                        embed.set_footer(text="Ctrl + Alt + De-leash")
+                                        embed.set_footer(text="Marsh")
                                         embed.timestamp = datetime.datetime.now()
                                         
                                         await ctx.respond(embed=embed, file=file)

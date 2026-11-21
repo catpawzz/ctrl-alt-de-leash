@@ -45,7 +45,7 @@ class QuestionCog(commands.Cog):
                                 description=question,
                                 color=discord.Color(0xe898ff)
                             )
-                            embed.set_footer(text="Ctrl + Alt + De-leash")
+                            embed.set_footer(text="Marsh")
                             embed.timestamp = datetime.datetime.now()
 
                             await ctx.respond(embed=embed)

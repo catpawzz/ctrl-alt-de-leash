@@ -77,7 +77,7 @@ I like my cat and meow this code is scuffed :3
                 self.logger.error(f"Failed to change display name: {e}")
 
 def setup_logger():
-    logger = logging.getLogger('mewo.py')
+    logger = logging.getLogger('marsh')
     logger.setLevel(logging.DEBUG)
     
     # Console handler with colors

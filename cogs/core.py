@@ -25,7 +25,7 @@ class CoreCog(commands.Cog):
             description=f"Latency: {latency}ms",
             color=discord.Color(0xe898ff)
         )
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         await ctx.respond(embed=embed, ephemeral=True)
     
@@ -40,9 +40,51 @@ class CoreCog(commands.Cog):
             description=f"I've been online for: **{uptime_str}**",
             color=discord.Color(0xe898ff)
         )
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         await ctx.respond(embed=embed, ephemeral=True)
+
+    @core_group.command(name="avatar", description="Show a user's avatar")
+    async def avatar(self, ctx, user: discord.Option(discord.User, "User to show", required=False)):
+        user = user or ctx.author
+        embed = discord.Embed(
+            title=f"🖼️ {user.display_name}'s Avatar",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_image(url=user.display_avatar.url)
+        embed.set_footer(text="Marsh")
+        embed.timestamp = datetime.datetime.now()
+        await ctx.respond(embed=embed)
+
+    @core_group.command(name="userinfo", description="Show info about a user")
+    async def userinfo(self, ctx, user: discord.Option(discord.User, "User to look up", required=False)):
+        user = user or ctx.author
+        embed = discord.Embed(
+            title=f"👤 {user.display_name}",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_thumbnail(url=user.display_avatar.url)
+        embed.add_field(name="Username", value=str(user), inline=True)
+        embed.add_field(name="ID", value=str(user.id), inline=True)
+        embed.add_field(name="Bot", value="Yes" if user.bot else "No", inline=True)
+        embed.add_field(name="Account created", value=discord.utils.format_dt(user.created_at, "R"), inline=False)
+        embed.set_footer(text="Marsh")
+        embed.timestamp = datetime.datetime.now()
+        await ctx.respond(embed=embed)
+
+    @core_group.command(name="about", description="Learn about Marsh")
+    async def about(self, ctx):
+        embed = discord.Embed(
+            title="☁️ About Marsh",
+            description="Half debugger, half catboy, all vibes.",
+            color=discord.Color(0xe898ff)
+        )
+        embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000)}ms", inline=True)
+        embed.add_field(name="Servers", value=str(len(self.bot.guilds)), inline=True)
+        embed.add_field(name="Commands", value=str(len(self.bot.application_commands)), inline=True)
+        embed.set_footer(text="Marsh")
+        embed.timestamp = datetime.datetime.now()
+        await ctx.respond(embed=embed)
 
 def setup(bot):
     bot.add_cog(CoreCog(bot))

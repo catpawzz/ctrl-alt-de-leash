@@ -51,7 +51,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -69,7 +69,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff) 
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -87,7 +87,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff) 
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -105,7 +105,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -121,7 +121,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
         
@@ -137,7 +137,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
         
@@ -153,7 +153,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -171,7 +171,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -189,7 +189,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -207,7 +207,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -225,7 +225,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -243,7 +243,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -261,7 +261,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -279,7 +279,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -297,7 +297,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -315,7 +315,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -333,7 +333,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -351,7 +351,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
     
@@ -369,7 +369,7 @@ class ActionsCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         embed.set_image(url=f"attachment://{file.filename}")
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.now()
         await ctx.respond(embed=embed, file=file)
 

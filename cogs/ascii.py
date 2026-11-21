@@ -43,7 +43,7 @@ class ASCIICog(commands.Cog):
                 description=f"```{ascii_art}```",
                 color=discord.Color(0xe898ff)
             )
-            embed.set_footer(text="Ctrl + Alt + De-leash")
+            embed.set_footer(text="Marsh")
             embed.timestamp = datetime.datetime.now()
             
             await ctx.respond(embed=embed)
@@ -64,7 +64,7 @@ class ASCIICog(commands.Cog):
             description=f"Popular styles:\n```{style_list}```\nPlus {len(self.styles) - len(popular_styles)} more styles.",
             color=discord.Color(0xe898ff)
         )
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed, ephemeral=True)

@@ -43,7 +43,7 @@ class GamesCog(commands.Cog):
         else:
             embed.add_field(name="Result", value=f"**{total}**", inline=False)
             
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed)
@@ -71,7 +71,7 @@ class GamesCog(commands.Cog):
             result = "I win!"
             
         embed.add_field(name="Result", value=result, inline=False, ephemeral=True)
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed)
@@ -86,7 +86,7 @@ class GamesCog(commands.Cog):
             color=discord.Color(0xe898ff)
         )
         
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed)
@@ -108,7 +108,7 @@ class GamesCog(commands.Cog):
                             color=discord.Color(0xe898ff)
                         )
                         
-                        embed.set_footer(text="Ctrl + Alt + De-leash")
+                        embed.set_footer(text="Marsh")
                         embed.timestamp = datetime.datetime.now()
                         
                         await ctx.respond(embed=embed)
@@ -137,7 +137,7 @@ class GamesCog(commands.Cog):
                             color=discord.Color(0xe898ff)
                         )
                         
-                        embed.set_footer(text="Ctrl + Alt + De-leash")
+                        embed.set_footer(text="Marsh")
                         embed.timestamp = datetime.datetime.now()
                         
                         await ctx.respond(embed=embed)
@@ -166,9 +166,36 @@ class GamesCog(commands.Cog):
                 )
         embed.add_field(name="Question", value=question, inline=False)
         embed.add_field(name="Answer", value=response, inline=False)
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
+        await ctx.respond(embed=embed)
+
+    @game_group.command(name="ship", description="Check the compatibility of two users")
+    async def ship(self, ctx, first: discord.Option(discord.User, "First user", required=True), second: discord.Option(discord.User, "Second user", required=True)):
+        seed = sum(sorted([first.id, second.id]))
+        percent = random.Random(seed).randint(0, 100)
+        filled = percent // 10
+        bar = "💖" * filled + "🖤" * (10 - filled)
+        embed = discord.Embed(
+            title="💘 Compatibility",
+            description=f"{first.mention} + {second.mention}\n\n{bar}\n**{percent}%**",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_footer(text="Marsh")
+        embed.timestamp = datetime.datetime.now()
+        await ctx.respond(embed=embed)
+
+    @game_group.command(name="rate", description="Rate something out of 10")
+    async def rate(self, ctx, thing: discord.Option(str, "What to rate", required=True)):
+        score = random.Random(thing.lower().strip()).randint(0, 10)
+        embed = discord.Embed(
+            title="⭐ Rating",
+            description=f"I rate **{thing}** a **{score}/10**",
+            color=discord.Color(0xe898ff)
+        )
+        embed.set_footer(text="Marsh")
+        embed.timestamp = datetime.datetime.now()
         await ctx.respond(embed=embed)
 
 def setup(bot):

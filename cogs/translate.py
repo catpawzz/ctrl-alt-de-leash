@@ -34,7 +34,7 @@ class TranslateCog(commands.Cog):
             
             embed.add_field(name="Original", value=text, inline=False)
             embed.add_field(name="Translation", value=result.text, inline=False)
-            embed.set_footer(text="Ctrl + Alt + De-leash")
+            embed.set_footer(text="Marsh")
             embed.timestamp = datetime.datetime.now()
             
             await ctx.respond(embed=embed)
@@ -51,7 +51,7 @@ class TranslateCog(commands.Cog):
             description=f"Here are some common language codes:\n{language_list}\n\n*And many more...*",
             color=discord.Color(0xe898ff)
         )
-        embed.set_footer(text="Ctrl + Alt + De-leash")
+        embed.set_footer(text="Marsh")
         embed.timestamp = datetime.datetime.now()
         
         await ctx.respond(embed=embed, ephemeral=True)
