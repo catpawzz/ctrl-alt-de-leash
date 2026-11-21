@@ -30,7 +30,7 @@ class JokeCog(commands.Cog):
             await self._fetch_joke(ctx, category)
     
     async def _fetch_joke(self, ctx, category=None):
-        joke_url = f"https://api.cat-space.net/api/text/jokes"
+        joke_url = f"https://ff.catmallow.dev/api/text/jokes"
         if category:
             joke_url += f"?category={category}"
         
