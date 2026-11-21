@@ -31,7 +31,7 @@ class QuestionCog(commands.Cog):
             await self._fetch_question(ctx)
 
     async def _fetch_question(self, ctx):
-        question_url = "https://api.cat-space.net/api/text/questions"
+        question_url = "https://ff.catmallow.dev/api/text/questions"
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(question_url) as response:
