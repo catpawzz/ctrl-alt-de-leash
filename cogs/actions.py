@@ -15,7 +15,7 @@ class ActionsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.logger = logging.getLogger('bot.py')
-        self.api_base_url = "https://api.cat-space.net/api/sfw/gifs/"
+        self.api_base_url = "https://ff.catmallow.dev/api/sfw/gifs/"
         
     async def get_action_gif(self, action):
         async with aiohttp.ClientSession() as session:
